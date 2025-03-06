@@ -1,8 +1,10 @@
 import react from 'react'
 import Search from './components/Search';
+import{useDebounce} from 'react-use';
 import { useState,useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
 import MovieCard from './components/MovieCard';
+
 
 const API_BASE_URL = 'https://api.themoviedb.org/3'
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -26,11 +28,18 @@ const App = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  // Debounce the search term so that it only gives us the final value after the user has stopped typing
+  useDebounce(() => {
+    setDebouncedSearchTerm(searchTerm);
+  }, 1000, [searchTerm]);
+
   const fetchMovies = async (query = '') => {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      
+
       const endPoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`:`${API_BASE_URL}/discover/movie?sort_by=popularity.desc`
       const response = await fetch(endPoint, API_OPTIONS);
 
@@ -58,8 +67,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [searchTerm]); // Added empty dependency array to ensure it runs only once
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm ]); // Added empty dependency array to ensure it runs only once
 
   return (
     <>
