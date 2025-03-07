@@ -1,9 +1,10 @@
-import react from 'react';
+import React from 'react';
 import Search from './components/Search';
 import { useDebounce } from 'react-use';
 import { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
-import MovieCard from './components/Moviecard'; // Ensure this path is correct
+import MovieCard from './components/MovieCard';
+import Pagination from './components/Pagination';
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -22,16 +23,20 @@ const App = () => {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useDebounce(() => {
     setDebouncedSearchTerm(searchTerm);
   }, 1000, [searchTerm]);
 
-  const fetchMovies = async (query = '') => {
+  const fetchMovies = async (query = '', page = 1) => {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const endPoint = query ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}` : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+      const endPoint = query
+        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&page=${page}`
+        : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc&page=${page}`;
       const response = await fetch(endPoint, API_OPTIONS);
 
       if (!response.ok) {
@@ -46,6 +51,7 @@ const App = () => {
         return;
       }
       setMovieList(data.results || []);
+      setTotalPages(data.total_pages || 1);
 
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
@@ -56,8 +62,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchMovies(debouncedSearchTerm);
-  }, [debouncedSearchTerm]);
+    fetchMovies(debouncedSearchTerm, currentPage);
+  }, [debouncedSearchTerm, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -87,6 +97,11 @@ const App = () => {
               </ul>
             )}
           </section>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
           <h1 className="text-white">{errorMessage}</h1>
         </div>
       </main>
