@@ -1,0 +1,24 @@
+.details-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center; /* Center horizontally */
+}
+
+.image-container img {
+  width: 300px; /* Fixed width */
+  height: 450px; /* Fixed height */
+  border-radius: 8px;
+}
+
+.info-container {
+  max-width: 600px;
+  margin-left: 20px; /* Add some space between the image and details */
+}
+
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  min-height: 100vh; /* Ensure it takes the full height of the viewport */
+}

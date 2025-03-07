@@ -140,6 +140,26 @@
       @apply text-gray-100 font-medium text-base;
     }
   }
+
+  .details-container {
+    @apply flex items-start;
+  }
+
+  .image-container img {
+    @apply w-[300px] h-[450px] rounded-lg;
+  }
+
+  .info-container {
+    @apply max-w-[600px] ml-5;
+  }
+
+  .preloader {
+    @apply fixed inset-0 flex items-center justify-center bg-primary z-50 opacity-0;
+  }
+
+  .preloader-svg {
+    @apply w-24 h-24;
+  }
 }
 
 @utility text-gradient {
