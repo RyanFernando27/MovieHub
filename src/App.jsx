@@ -3,7 +3,7 @@ import Search from './components/Search';
 import { useDebounce } from 'react-use';
 import { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
-import MovieCard from './components/MovieCard'; // Ensure this path is correct
+import MovieCard from './components/Moviecard'; // Ensure this path is correct
 import Pagination from './components/Pagination';
 
 
