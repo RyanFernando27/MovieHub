@@ -25,13 +25,6 @@
     font-family: "DM Sans", serif;
     font-optical-sizing: auto;
     background: #030014;
-    overflow-x: hidden; /* Prevent horizontal overflow */
-  }
-
-  /* Hide horizontal scrollbar */
-  body::-webkit-scrollbar {
-    width: 0;
-    height: 0;
   }
 
   h1 {
@@ -47,7 +40,7 @@
   }
 
   header {
-    @apply sm:mt-10 mt-5;
+    @apply sm:mt-10 mt-3;
   }
 
   header img {
@@ -58,17 +51,15 @@
 @layer components {
   .pattern {
     @apply bg-hero-pattern w-screen h-screen bg-center bg-cover absolute z-0;
-    overflow-x: hidden; /* Prevent horizontal overflow */
   }
 
   .wrapper {
-    @apply px-5 py-12 xs:p-10 max-w-7xl mx-auto flex flex-col relative z-10;
-    overflow-x: hidden; /* Prevent horizontal overflow */
+    @apply px-5 py-10 xs:p-10 max-w-7xl mx-auto flex flex-col relative z-10;
   }
 
   .trending {
     @apply mt-20;
-
+xw
     & ul {
       @apply flex flex-row overflow-y-auto gap-5 -mt-10 w-full hide-scrollbar;
     }
@@ -148,26 +139,6 @@
     & .content .year {
       @apply text-gray-100 font-medium text-base;
     }
-  }
-
-  .details-container {
-    @apply flex items-start;
-  }
-
-  .image-container img {
-    @apply w-[300px] h-[450px] rounded-lg;
-  }
-
-  .info-container {
-    @apply max-w-[600px] ml-5;
-  }
-
-  .preloader {
-    @apply fixed inset-0 flex items-center justify-center bg-primary z-50 opacity-0;
-  }
-
-  .preloader-svg {
-    @apply w-24 h-24;
   }
 }
 
