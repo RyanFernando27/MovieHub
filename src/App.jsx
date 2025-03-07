@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Search from './components/Search';
 import { useDebounce } from 'react-use';
+import { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
 import Moviecard from './components/Moviecard';
 import Pagination from './components/Pagination';
 import MovieDetails from './components/MovieDetails';
-import Preloader from './components/Preloader'; // Ensure this path is correct
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -27,7 +27,6 @@ const App = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
 
   useDebounce(() => {
     setDebouncedSearchTerm(searchTerm);
@@ -74,48 +73,47 @@ const App = () => {
 
   return (
     <Router>
-      {loading && <Preloader setLoading={setLoading} />}
-      {!loading && (
-        <Routes>
-          <Route path="/" element={
-            <main>
-              <div className="pattern" />
-              <div className="wrapper">
-                <header className="header-animation">
-                  <img src="./hero.png" alt="hero" />
-                  <h1>Find <span className="text-gradient">Movies</span> You'll enjoy without the Hassle</h1>
-                  <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                </header>
-                <section className="all-movies ">
-                  <h2 className="mt-[40px]">All Movies</h2>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
+      <Routes>
+        <Route path="/" element={
+          <main>
+            <div className="pattern" />
+            <div className="wrapper">
+            <header className="header-animation">
+                <img src="./hero.png" alt="hero" />
+                <h1>Find <span className="text-gradient">Movies</span> You'll enjoy without the Hassle</h1>
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              </header>
+              <section className="all-movies ">
+                <h2 className="mt-[40px]">All Movies</h2>
+                <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+                {isLoading ? (
+                  <BounceLoader
+                    className="text-center"
+                    color="#8C00FF"
+                    size={100}
                   />
-                  {isLoading ? (
-                    <BounceLoader
-                      className="text-center"
-                      color="#8C00FF"
-                      size={100}
-                    />
-                  ) : errorMessage ? (
-                    <p className="text-red-600">{errorMessage}</p>
-                  ) : (
-                    <ul>
-                      {movieList.map((movie) => (
-                        <Moviecard key={movie.id} movie={movie} />
-                      ))}
-                    </ul>
-                  )}
-                </section>
-                <h1 className="text-white">{errorMessage}</h1>
-              </div>
-            </main>
-          } />
-          <Route path="/movie/:id" element={<MovieDetails movies={movieList} />} />
-        </Routes>
-      )}
+                ) : errorMessage ? (
+                  <p className="text-red-600">{errorMessage}</p>
+                ) : (
+                    
+                  <ul>
+                    {movieList.map((movie) => (
+                      <Moviecard key={movie.id} movie={movie} />
+                    ))}
+                  </ul>
+                )}
+              </section>
+             
+              <h1 className="text-white">{errorMessage}</h1>
+            </div>
+          </main>
+        } />
+        <Route path="/movie/:id" element={<MovieDetails movies={movieList} />} />
+      </Routes>
     </Router>
   );
 };
