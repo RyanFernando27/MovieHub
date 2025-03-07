@@ -1,11 +1,12 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Search from './components/Search';
 import { useDebounce } from 'react-use';
 import { useState, useEffect } from 'react';
 import { BounceLoader } from 'react-spinners';
-import MovieCard from './components/Moviecard'; // Ensure this path is correct
+import Moviecard from './components/Moviecard';
 import Pagination from './components/Pagination';
-
+import MovieDetails from './components/MovieDetails';
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -71,42 +72,49 @@ const App = () => {
   };
 
   return (
-    <>
-      <main>
-        <div className="pattern" />
-        <div className="wrapper">
-          <header>
-            <img src="./hero.png" alt="hero" />
-            <h1>Find <span className="text-gradient">Movies</span> You'll enjoy without the Hassle</h1>
-            <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          </header>
-          <section className="all-movies">
-            <h2 className="mt-[40px]">All Movies</h2>
-            {isLoading ? (
-              <BounceLoader
-                className="text-center"
-                color="#8C00FF"
-                size={100}
+    <Router>
+      <Routes>
+        <Route path="/" element={
+          <main>
+            <div className="pattern" />
+            <div className="wrapper">
+            <header className="header-animation">
+                <img src="./hero.png" alt="hero" />
+                <h1>Find <span className="text-gradient">Movies</span> You'll enjoy without the Hassle</h1>
+                <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              </header>
+              <section className="all-movies movie-card-animation">
+                <h2 className="mt-[40px]">All Movies</h2>
+                <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
               />
-            ) : errorMessage ? (
-              <p className="text-red-600">{errorMessage}</p>
-            ) : (
-              <ul>
-                {movieList.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </ul>
-            )}
-          </section>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-          <h1 className="text-white">{errorMessage}</h1>
-        </div>
-      </main>
-    </>
+                {isLoading ? (
+                  <BounceLoader
+                    className="text-center"
+                    color="#8C00FF"
+                    size={100}
+                  />
+                ) : errorMessage ? (
+                  <p className="text-red-600">{errorMessage}</p>
+                ) : (
+                    
+                  <ul>
+                    {movieList.map((movie) => (
+                      <Moviecard key={movie.id} movie={movie} />
+                    ))}
+                  </ul>
+                )}
+              </section>
+             
+              <h1 className="text-white">{errorMessage}</h1>
+            </div>
+          </main>
+        } />
+        <Route path="/movie/:id" element={<MovieDetails movies={movieList} />} />
+      </Routes>
+    </Router>
   );
 };
 

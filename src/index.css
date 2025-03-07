@@ -160,3 +160,32 @@
     display: none;
   }
 }
+
+@keyframes slideDownFadeIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header-animation {
+  animation: slideDownFadeIn 1s ease-out forwards;
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.movie-card-animation {
+  animation: slideUpFadeIn 1s ease-out forwards;
+}
